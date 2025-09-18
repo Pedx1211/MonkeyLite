@@ -228,7 +228,7 @@ export default function Settings({
       <div
         className={`justify-center items-center w-full min-h-[52px] ${
           isFinished ? "hidden" : "flex"
-        }`}
+        } ${isAbout ? "hidden" : "flex"}`}
       >
         <a
           onClick={() => {

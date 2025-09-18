@@ -234,9 +234,7 @@ function App() {
                   onFocus={() => {
                     console.log("Keyboard is up!");
                   }}
-                  onKeyDown={(e) => {
-                    e.preventDefault();
-                  }}
+                  onKeyDown={(e) => {}}
                 />
               </div>
             </div>
