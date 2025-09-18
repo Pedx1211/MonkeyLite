@@ -76,6 +76,7 @@ function App() {
     currentWordIndex,
     currentWordOriginal,
     correctWords,
+    processKey,
     setWords,
     setCurrentLetterIndex,
     setCurrentWordIndex,
@@ -128,6 +129,7 @@ function App() {
     isTyping,
     setFinished,
   });
+
   return (
     <>
       <div className="flex flex-col justify-start items-start w-full h-screen px-4 padding-0 py-6 overflow-y-auto relative">
@@ -231,10 +233,15 @@ function App() {
                   autoCapitalize="off"
                   autoCorrect="off"
                   spellCheck="false"
-                  onFocus={() => {
-                    console.log("Keyboard is up!");
+                  onInput={(e) => {
+                    const input = e.target as HTMLInputElement;
+                    const value = input.value;
+                    const lastChar = value.slice(-1);
+
+                    if (lastChar) processKey(lastChar);
+
+                    input.value = "";
                   }}
-                  onKeyDown={(e) => {}}
                 />
               </div>
             </div>

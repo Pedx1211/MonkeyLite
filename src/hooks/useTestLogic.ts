@@ -68,6 +68,154 @@ export function useTestLogic({
     }
   };
 
+  const processKey = (key: string) => {
+    const id = `${currentWordIndex}-${currentLetterIndex}`;
+
+    const currentWord = words[currentWordIndex];
+    const expectedLetter = currentWord[currentLetterIndex];
+
+    if (currentLetterIndex === 0) {
+      setCurrentWordOriginal(currentWord);
+    }
+
+    if (
+      key.length === 1 &&
+      key !== " " &&
+      key !== "Backspace" &&
+      isLimited !== true
+    ) {
+      setIsTyping((prev) => {
+        if (!prev) {
+          return true;
+        }
+        return prev;
+      });
+
+      resetTimer();
+
+      if (!startTime) {
+        setStartTime(Date.now());
+      }
+
+      if (
+        currentLetterIndex + 1 == currentWordOriginal.length &&
+        currentWordIndex + 1 == words.length
+      ) {
+        const lastId = `${currentWordIndex}-${currentLetterIndex}`;
+
+        const updatedResults: ResultsType = {
+          ...results,
+          [lastId]:
+            currentWordOriginal[currentLetterIndex] === key
+              ? "correct"
+              : "incorrect",
+        };
+
+        addWord(updatedResults);
+        setEndTime(Date.now());
+        setCurrentLetterIndex(0);
+        setCurrentWordIndex(0);
+        setFinished(true);
+        setCurrentLine(0);
+        setLineOffset(0);
+        setNewText(true);
+        setResults({});
+        setLimited(false);
+        setCurrentWordOriginal("");
+        setIsTyping(false);
+      }
+
+      if (currentLetterIndex + 1 > currentWord.length) {
+        if (words[currentWordIndex].length < currentWordOriginal.length + 19) {
+          setWords((prevWords) => {
+            const newWords = [...prevWords];
+            newWords[currentWordIndex] = prevWords[currentWordIndex] + key;
+            return newWords;
+          });
+
+          setResults((prev) => ({ ...prev, [id]: "incorrectextra" }));
+          setCurrentLetterIndex((i) => i + 1);
+        } else {
+          setLimited(true);
+        }
+      } else {
+        if (key === expectedLetter) {
+          setResults((prev) => ({ ...prev, [id]: "correct" }));
+
+          setCurrentLetterIndex((i) => i + 1);
+        } else {
+          setResults((prev) => ({ ...prev, [id]: "incorrect" }));
+
+          setCurrentLetterIndex((i) => i + 1);
+        }
+      }
+    }
+
+    if (key === " ") {
+      if (currentLetterIndex > 0 && currentWordIndex + 1 < words.length) {
+        addWord();
+        const currWord = wordRefs.current[currentWordIndex];
+        const nextWord = wordRefs.current[currentWordIndex + 1];
+
+        if (currWord && nextWord) {
+          const currTop = currWord.getBoundingClientRect().top;
+          const nextTop = nextWord.getBoundingClientRect().top;
+
+          if (currentLine >= 1) {
+            if (currTop !== nextTop) {
+              setLineOffset((prev) => prev + 1);
+            }
+          }
+        }
+        setCurrentWordIndex((wi) => wi + 1);
+        setCurrentLetterIndex(0);
+        setLimited(false);
+      }
+      if (currentWordIndex + 1 == words.length) {
+        setEndTime(Date.now());
+        setCurrentLetterIndex(0);
+        setCurrentWordIndex(0);
+        setFinished(true);
+        setCurrentLine(0);
+        setLineOffset(0);
+        setNewText(true);
+        setResults({});
+        setLimited(false);
+        setCurrentWordOriginal("");
+        setIsTyping(false);
+      }
+    }
+
+    if (key === "Backspace") {
+      if (currentLetterIndex > 0) {
+        const prevIndex = currentLetterIndex - 1;
+        const id = `${currentWordIndex}-${prevIndex}`;
+
+        if (currentLetterIndex > currentWordOriginal.length) {
+          setWords((prevWords) => {
+            const newWords = [...prevWords];
+            newWords[currentWordIndex] = prevWords[currentWordIndex].slice(
+              0,
+              -1
+            );
+            setLimited(false);
+            return newWords;
+          });
+        }
+
+        setResults((prev) => {
+          const newResults = { ...prev };
+          delete newResults[id];
+          return newResults;
+        });
+
+        setCurrentLetterIndex((prev) => prev - 1);
+      } else {
+        return;
+      }
+    }
+  };
+
   useEffect(() => {
     if (startTime && endTime) {
       setElapsedSeconds((endTime - startTime) / 1000);
@@ -77,8 +225,6 @@ export function useTestLogic({
     if (isFinished === true) return;
 
     const handleKeydown = (e: KeyboardEvent) => {
-      const id = `${currentWordIndex}-${currentLetterIndex}`;
-
       if (e.ctrlKey) return;
 
       if (e.getModifierState("CapsLock")) {
@@ -86,154 +232,11 @@ export function useTestLogic({
       } else {
         setCapsOn(false);
       }
-
-      const currentWord = words[currentWordIndex];
-      const expectedLetter = currentWord[currentLetterIndex];
-
-      if (currentLetterIndex === 0) {
-        setCurrentWordOriginal(currentWord);
-      }
-
-      if (
-        e.key.length === 1 &&
-        e.key !== " " &&
-        e.key !== "Backspace" &&
-        isLimited !== true
-      ) {
-        setIsTyping((prev) => {
-          if (!prev) {
-            return true;
-          }
-          return prev;
-        });
-
-        resetTimer();
-
-        if (!startTime) {
-          setStartTime(Date.now());
-        }
-
-        if (
-          currentLetterIndex + 1 == currentWordOriginal.length &&
-          currentWordIndex + 1 == words.length
-        ) {
-          const lastId = `${currentWordIndex}-${currentLetterIndex}`;
-
-          const updatedResults: ResultsType = {
-            ...results,
-            [lastId]:
-              currentWordOriginal[currentLetterIndex] === e.key
-                ? "correct"
-                : "incorrect",
-          };
-
-          addWord(updatedResults);
-          setEndTime(Date.now());
-          setCurrentLetterIndex(0);
-          setCurrentWordIndex(0);
-          setFinished(true);
-          setCurrentLine(0);
-          setLineOffset(0);
-          setNewText(true);
-          setResults({});
-          setLimited(false);
-          setCurrentWordOriginal("");
-          setIsTyping(false);
-        }
-
-        if (currentLetterIndex + 1 > currentWord.length) {
-          if (
-            words[currentWordIndex].length <
-            currentWordOriginal.length + 19
-          ) {
-            setWords((prevWords) => {
-              const newWords = [...prevWords];
-              newWords[currentWordIndex] = prevWords[currentWordIndex] + e.key;
-              return newWords;
-            });
-
-            setResults((prev) => ({ ...prev, [id]: "incorrectextra" }));
-            setCurrentLetterIndex((i) => i + 1);
-          } else {
-            setLimited(true);
-          }
-        } else {
-          if (e.key === expectedLetter) {
-            setResults((prev) => ({ ...prev, [id]: "correct" }));
-
-            setCurrentLetterIndex((i) => i + 1);
-          } else {
-            setResults((prev) => ({ ...prev, [id]: "incorrect" }));
-
-            setCurrentLetterIndex((i) => i + 1);
-          }
-        }
-      }
-
       if (e.key === " ") {
         e.preventDefault();
-        if (currentLetterIndex > 0 && currentWordIndex + 1 < words.length) {
-          addWord();
-          const currWord = wordRefs.current[currentWordIndex];
-          const nextWord = wordRefs.current[currentWordIndex + 1];
-
-          if (currWord && nextWord) {
-            const currTop = currWord.getBoundingClientRect().top;
-            const nextTop = nextWord.getBoundingClientRect().top;
-
-            if (currentLine >= 1) {
-              if (currTop !== nextTop) {
-                setLineOffset((prev) => prev + 1);
-              }
-            }
-          }
-          setCurrentWordIndex((wi) => wi + 1);
-          setCurrentLetterIndex(0);
-          setLimited(false);
-        }
-        if (currentWordIndex + 1 == words.length) {
-          setEndTime(Date.now());
-          setCurrentLetterIndex(0);
-          setCurrentWordIndex(0);
-          setFinished(true);
-          setCurrentLine(0);
-          setLineOffset(0);
-          setNewText(true);
-          setResults({});
-          setLimited(false);
-          setCurrentWordOriginal("");
-          setIsTyping(false);
-        }
       }
 
-      if (e.key === "Backspace") {
-        if (currentLetterIndex > 0) {
-          const prevIndex = currentLetterIndex - 1;
-          const id = `${currentWordIndex}-${prevIndex}`;
-
-          if (currentLetterIndex > currentWordOriginal.length) {
-            setWords((prevWords) => {
-              const newWords = [...prevWords];
-              newWords[currentWordIndex] = prevWords[currentWordIndex].slice(
-                0,
-                -1
-              );
-              setLimited(false);
-              return newWords;
-            });
-          }
-
-          setResults((prev) => {
-            const newResults = { ...prev };
-            delete newResults[id];
-            return newResults;
-          });
-
-          setCurrentLetterIndex((prev) => prev - 1);
-        } else {
-          return;
-        }
-      }
+      processKey(e.key);
     };
 
     window.addEventListener("keydown", handleKeydown);
@@ -268,6 +271,7 @@ export function useTestLogic({
     currentWordIndex,
     currentWordOriginal,
     correctWords,
+    processKey,
     setWords,
     setCurrentLetterIndex,
     setCurrentWordIndex,
