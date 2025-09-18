@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+body {
+  background-color: #323437;
+}
+::selection {
+  background: #e2b614;
+  color: #2c2e31;
+}
+
+::-moz-selection {
+  background: #e2b614;
+  color: #2c2e31;
+}
+
+@media (max-width: 720px) {
+  .hide-settings {
+    display: none;
+  }
+}
+
+@media (min-width: 721px) {
+  .show-settings {
+    display: none;
+  }
+}
+
+@media (max-width: 425px) {
+  .gap425 {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 330px) {
+  .gap330 {
+    gap: 4px;
+  }
+}
+
+@media (max-width: 721px) {
+  .at-721 {
+    display: none;
+  }
+  .my-div {
+    max-width: 688px;
+  }
+}
+
+@media (min-width: 721px) {
+  .my-div {
+    max-width: 640px;
+  }
+  .padding-0 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@media (min-width: 849px) {
+  .my-div {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1105px) {
+  .my-div {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1361px) {
+  .my-div {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1617px) {
+  .my-div {
+    max-width: 1528px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+html::-webkit-scrollbar {
+  width: 6px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.mydialog {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+.mydialog::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mydialog::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mydialog::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.mydialog::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
