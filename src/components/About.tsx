@@ -25,7 +25,7 @@ export default function About() {
           .
           <br />
           <a
-            href=""
+            href="https://github.com/Pedx1211/MonkeyLite"
             target="_blank"
             rel="noopener noreferrer"
             className="underline underline-offset-2 hover:text-[#cccbc0]"
