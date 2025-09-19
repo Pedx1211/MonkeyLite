@@ -51,7 +51,7 @@ function App() {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const [prevValue, setPrevValue] = useState("");
+  const prevValueRef = useRef("");
 
   const { warning, text, showWarning } = useWarning();
 
@@ -238,15 +238,17 @@ function App() {
                     const input = e.target as HTMLInputElement;
                     const value = input.value;
 
-                    if (value.length < prevValue.length) {
-                      processKey("Backspace");
-                    } else {
+                    if (value.length > prevValueRef.current.length) {
+                      // user typed a new character
                       const lastChar = value.slice(-1);
-
                       if (lastChar) processKey(lastChar);
+                    } else if (value.length < prevValueRef.current.length) {
+                      // user pressed backspace
+                      processKey("Backspace");
                     }
+
                     input.value = "";
-                    setPrevValue(value);
+                    prevValueRef.current = input.value;
                   }}
                 />
               </div>
