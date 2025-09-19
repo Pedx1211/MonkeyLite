@@ -51,7 +51,6 @@ function App() {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const prevValueRef = useRef("");
 
   const { warning, text, showWarning } = useWarning();
 
@@ -92,6 +91,7 @@ function App() {
     wordRefs,
     results,
     isFinished,
+    inputRef,
     setFinished,
     setLineOffset,
     setCapsOn,

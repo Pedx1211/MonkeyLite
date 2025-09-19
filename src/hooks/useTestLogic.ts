@@ -10,6 +10,7 @@ type UseTestLogicProps = {
   wordRefs: React.MutableRefObject<(HTMLSpanElement | null)[]>;
   results: ResultsType;
   isFinished: boolean;
+  inputRef: React.RefObject<HTMLInputElement | null>;
   setFinished: React.Dispatch<React.SetStateAction<boolean>>;
   setLineOffset: React.Dispatch<React.SetStateAction<number>>;
   setCapsOn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,6 +27,7 @@ export function useTestLogic({
   wordRefs,
   results,
   isFinished,
+  inputRef,
   setFinished,
   setLineOffset,
   setCapsOn,
@@ -53,8 +55,6 @@ export function useTestLogic({
       setIsTyping(false);
     }, 10000);
   };
-
-  const isMobile = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
   const addWord = (resultsObj = results) => {
     const entries = Object.entries(resultsObj).filter(([key]) =>
@@ -227,6 +227,8 @@ export function useTestLogic({
     if (isFinished === true) return;
 
     const handleKeydown = (e: KeyboardEvent) => {
+      if (document.activeElement === inputRef.current) return;
+
       if (e.ctrlKey) return;
 
       if (e.getModifierState("CapsLock")) {
@@ -241,16 +243,13 @@ export function useTestLogic({
       processKey(e.key);
     };
 
-    if (!isMobile) {
-      window.addEventListener("keydown", handleKeydown);
-    }
+    window.addEventListener("keydown", handleKeydown);
 
     resetTimer();
 
     return () => {
-      if (!isMobile) {
-        window.removeEventListener("keydown", handleKeydown);
-      }
+      window.removeEventListener("keydown", handleKeydown);
+
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, [currentLetterIndex, currentWordIndex, words, isSettingsOpen]);
