@@ -54,6 +54,8 @@ export function useTestLogic({
     }, 10000);
   };
 
+  const isMobile = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
   const addWord = (resultsObj = results) => {
     const entries = Object.entries(resultsObj).filter(([key]) =>
       key.startsWith(`${currentWordIndex}-`)
@@ -239,11 +241,16 @@ export function useTestLogic({
       processKey(e.key);
     };
 
-    window.addEventListener("keydown", handleKeydown);
+    if (!isMobile) {
+      window.addEventListener("keydown", handleKeydown);
+    }
+
     resetTimer();
 
     return () => {
-      window.removeEventListener("keydown", handleKeydown);
+      if (!isMobile) {
+        window.removeEventListener("keydown", handleKeydown);
+      }
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, [currentLetterIndex, currentWordIndex, words, isSettingsOpen]);
