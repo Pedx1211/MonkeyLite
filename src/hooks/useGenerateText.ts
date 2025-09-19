@@ -32,8 +32,12 @@ export function useGenerateText(
           fetch("/words/medium.txt").then((res) => res.text()),
           fetch("/words/short.txt").then((res) => res.text()),
         ]).then(([txt1, txt2]) => {
-          const words1 = txt1.split(/\s+/).filter(Boolean);
-          const words2 = txt2.split(/\s+/).filter(Boolean);
+          const words1 = txt1
+            .split(/\s+/)
+            .filter((w) => w.length > 1 || w === "a" || w === "I");
+          const words2 = txt2
+            .split(/\s+/)
+            .filter((w) => w.length > 1 || w === "a" || w === "I");
 
           const allWords: string[] = [];
           const countPerFile = Math.floor(200 / 2);
@@ -61,8 +65,12 @@ export function useGenerateText(
           fetch("/words/medium.txt").then((res) => res.text()),
           fetch("/words/short.txt").then((res) => res.text()),
         ]).then(([txt1, txt2]) => {
-          const words1 = txt1.split(/\s+/).filter(Boolean);
-          const words2 = txt2.split(/\s+/).filter(Boolean);
+          const words1 = txt1
+            .split(/\s+/)
+            .filter((w) => w.length > 1 || w === "a" || w === "I");
+          const words2 = txt2
+            .split(/\s+/)
+            .filter((w) => w.length > 1 || w === "a" || w === "I");
 
           const totalWords = wordsTypeMap[typeSetting];
           const words1Count = Math.round(totalWords * 0.75);

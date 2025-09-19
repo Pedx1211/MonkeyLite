@@ -129,6 +129,7 @@ function App() {
     testType,
     isTyping,
     setFinished,
+    setIsTyping,
   });
 
   return (
@@ -238,17 +239,18 @@ function App() {
                     const input = e.target as HTMLInputElement;
                     const value = input.value;
 
-                    if (value.length > prevValueRef.current.length) {
-                      // user typed a new character
+                    if (value) {
                       const lastChar = value.slice(-1);
-                      if (lastChar) processKey(lastChar);
-                    } else if (value.length < prevValueRef.current.length) {
-                      // user pressed backspace
-                      processKey("Backspace");
+                      processKey(lastChar);
                     }
 
                     input.value = "";
-                    prevValueRef.current = input.value;
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Backspace") {
+                      processKey("Backspace");
+                      e.preventDefault();
+                    }
                   }}
                 />
               </div>

@@ -5,6 +5,7 @@ interface UseTimerProps {
   testType: number;
   isTyping: boolean;
   setFinished: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function useTimer({
@@ -12,6 +13,7 @@ export function useTimer({
   testType,
   isTyping,
   setFinished,
+  setIsTyping,
 }: UseTimerProps) {
   const timeLimitMap: Record<number, number> = {
     1: 15,
@@ -48,6 +50,7 @@ export function useTimer({
         if (prev <= 1) {
           clearInterval(intervalRef.current!);
           intervalRef.current = null;
+          setIsTyping(false);
           setFinished(true);
           return 0;
         }
