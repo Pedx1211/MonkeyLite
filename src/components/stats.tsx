@@ -68,6 +68,7 @@ export default function Stats({
 
   return (
     <>
+      <title>About | MonkeyLite</title>
       <div id="stats" className="flex justify-center w-full  items-center">
         <div
           id="group wpm"

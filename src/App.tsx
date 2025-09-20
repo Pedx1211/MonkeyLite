@@ -132,6 +132,10 @@ function App() {
     setIsTyping,
   });
 
+  useEffect(() => {
+    document.title = isAbout ? "About | MonkeyLite" : "MonkeyLite";
+  }, [isAbout]);
+
   return (
     <>
       <div className="flex flex-col justify-start items-start w-full h-screen px-4 padding-0 py-6 overflow-y-auto relative">
