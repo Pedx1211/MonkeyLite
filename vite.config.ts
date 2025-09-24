@@ -12,7 +12,7 @@ export default defineConfig({
       manifest: {
         name: "MonkeyLite",
         short_name: "MonkeyLite",
-        description: "Typing app for practice",
+        description: "A lite clone of MonkeyType",
         theme_color: "#323437",
         background_color: "#323437",
         display: "standalone",
@@ -28,10 +28,10 @@ export default defineConfig({
             type: "image/png",
           },
           {
-            src: "ShortcutPC.png",
+            src: "/ShortcutPC.png",
             sizes: "512x512",
             type: "image/png",
-            purpose: "any maskable",
+            purpose: "maskable",
           },
         ],
       },
