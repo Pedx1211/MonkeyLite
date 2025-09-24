@@ -3,5 +3,37 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  plugins: [tailwindcss(), react()],
+  plugins: [
+    tailwindcss(),
+    react(),
+    VitePWA({
+      registerType: "autoUpdate",
+      manifest: {
+        name: "MonkeyLite",
+        short_name: "MonkeyLite",
+        description: "Typing app for practice",
+        theme_color: "#323437",
+        background_color: "#323437",
+        display: "standalone",
+        icons: [
+          {
+            src: "/ShortcutMobile.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "/ShortcutPC.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+          {
+            src: "ShortcutPC.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any maskable",
+          },
+        ],
+      },
+    }),
+  ],
 });
