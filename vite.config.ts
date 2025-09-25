@@ -41,6 +41,7 @@ export default defineConfig({
           "words/*.txt",
           "quotes/*.json",
         ],
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       },
     }),
   ],
