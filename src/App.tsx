@@ -76,6 +76,7 @@ function App() {
     currentWordIndex,
     currentWordOriginal,
     correctWords,
+    startTime,
     processKey,
     setWords,
     setCurrentLetterIndex,
@@ -128,6 +129,7 @@ function App() {
     typeSetting,
     testType,
     isTyping,
+    startTime,
     setFinished,
     setIsTyping,
   });

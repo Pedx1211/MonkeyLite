@@ -53,7 +53,7 @@ export function useTestLogic({
     }
     timeoutRef.current = setTimeout(() => {
       setIsTyping(false);
-    }, 10000);
+    }, 4000);
   };
 
   const addWord = (resultsObj = results) => {
@@ -277,6 +277,7 @@ export function useTestLogic({
     currentWordIndex,
     currentWordOriginal,
     correctWords,
+    startTime,
     processKey,
     setWords,
     setCurrentLetterIndex,

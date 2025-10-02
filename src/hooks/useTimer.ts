@@ -4,6 +4,7 @@ interface UseTimerProps {
   typeSetting: number;
   testType: number;
   isTyping: boolean;
+  startTime: number | null;
   setFinished: React.Dispatch<React.SetStateAction<boolean>>;
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -12,6 +13,7 @@ export function useTimer({
   typeSetting,
   testType,
   isTyping,
+  startTime,
   setFinished,
   setIsTyping,
 }: UseTimerProps) {
@@ -33,7 +35,7 @@ export function useTimer({
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-  }, [isTyping, typeSetting, testType, timeLimit]);
+  }, [startTime, typeSetting, testType, timeLimit]);
 
   useEffect(() => {
     if (!isTyping) {
